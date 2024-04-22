@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hh.mapper.BorrowRecordsMapper">
+
+    <select id="findAll" resultType="com.hh.pojo.dto.BorrowResult">
+        SELECT
+        b.title,
+        br.borrow_date,
+        br.return_date,
+        (CASE WHEN b.is_borrowed = 1 THEN TRUE ELSE FALSE END) AS isBorrowed,
+        u.username
+        FROM
+        books b
+        LEFT JOIN
+        borrow_records br ON b.book_id = br.book_id
+        LEFT JOIN
+        user u ON br.user_id = u.user_id
+        <where>
+            <if test="username != null and username.trim() != ''">
+                AND u.username = #{username}
+            </if>
+            <if test="title != null and title.trim() != ''">
+                AND b.title = #{title}
+            </if>
+        </where>
+    </select>
+</mapper>

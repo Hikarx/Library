@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>图书借阅管理</title>
+    <link rel="stylesheet" href="css/borrow.css">
+</head>
+<body>
+<h1>借阅管理</h1>
+
+<!-- 查询区域 -->
+<div>
+    <label for="borrower_name">借阅人：</label>
+    <input type="text" id="borrower_name" name="borrower_name" placeholder="请输入">
+    <label for="book_name">图书名称：</label>
+    <input type="text" id="book_name" name="book_name" placeholder="请输入">
+
+    <button id="search">查询</button>
+    <button id="reset">重置</button>
+</div>
+
+<!-- 借阅信息表格 -->
+<table>
+    <thead>
+    <tr>
+        <th>图书名称</th>
+        <th>借阅时间</th>
+        <th>归还时间</th>
+        <th>借阅状态</th>
+        <th>借阅人</th>
+        <th>操作</th>
+    </tr>
+    </thead>
+    <tbody id="borrow_info">
+    <!-- 用于显示借阅信息的行在此插入 -->
+    </tbody>
+</table>
+
+
+<script  src="js/borrow.js"></script>
+</body>
+</html>
