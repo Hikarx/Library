@@ -1,4 +1,3 @@
-// 将查询逻辑封装成一个函数
 function searchBooks() {
     const username = document.getElementById('borrower_name').value;
     const title = document.getElementById('book_name').value;
@@ -34,13 +33,10 @@ function searchBooks() {
         });
 }
 
-// 在 DOMContentLoaded 事件中调用 searchBooks 函数
 document.addEventListener('DOMContentLoaded', function () {
-    // 获取查询按钮并绑定点击事件
     const searchButton = document.getElementById('search');
     searchButton.addEventListener('click', searchBooks);
 
-    // 页面加载完成时，自动执行一次查询
     searchBooks();
 });
 
@@ -53,7 +49,7 @@ function borrowBook(bookTitle) {
         .then(response => {
             if (response.ok) {
                 alert('借阅成功');
-                searchBooks(); // 调用 searchBooks 以更新页面数据
+                searchBooks();
             } else {
                 alert('借阅失败');
             }
@@ -73,7 +69,7 @@ function returnBook(bookTitle) {
         .then(response => {
             if (response.ok) {
                 alert('归还成功');
-                searchBooks(); // 调用 searchBooks 以更新页面数据
+                searchBooks();
             } else {
                 alert('归还失败');
             }

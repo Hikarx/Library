@@ -49,13 +49,10 @@ public class BorrowRecordsController {
     public ResponseEntity<?> returnBook(@PathVariable Integer userId, @PathVariable String bookTitle) {
         System.out.println("归还  userId: " + userId + ", bookTitle: " + bookTitle);
         try {
-            // 调用 service 层的归还书籍方法
             borrowRecordsService.returnBook(userId, bookTitle);
 
-            // 归还成功
             return ResponseEntity.ok().body("归还成功");
         } catch (Exception e) {
-            // 出现异常
             return ResponseEntity.badRequest().body("归还失败");
         }
     }
