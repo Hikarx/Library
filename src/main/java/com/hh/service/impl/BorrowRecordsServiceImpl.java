@@ -10,6 +10,7 @@ import com.hh.mapper.BorrowRecordsMapper;
 import com.hh.pojo.Books;
 import com.hh.pojo.BorrowRecords;
 import com.hh.pojo.dto.BorrowResult;
+import com.hh.pojo.dto.PageResult;
 import com.hh.service.BooksService;
 import com.hh.service.BorrowRecordsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,8 +36,25 @@ public class BorrowRecordsServiceImpl extends ServiceImpl<BorrowRecordsMapper, B
     @Autowired
     private BooksMapper booksMapper;
 
-    public List<BorrowResult> all(String username, String title) {
+/*    public List<BorrowResult> all(String username, String title) {
         return borrowRecordsMapper.findAll(username, title);
+    } */
+    public PageResult all(String username, String title, int currentPage, int recordsPerPage) {
+        List<BorrowResult> all = borrowRecordsMapper.findAll(username, title);
+        currentPage = 50;
+        int startIndex = (currentPage - 1) * recordsPerPage;
+        int endIndex = Math.min(startIndex + recordsPerPage, all.size());
+
+        List<BorrowResult> page = all.subList(startIndex, endIndex);
+
+        float totalRecords = all.size();
+        int totalPages = (int) Math.ceil(totalRecords / (float)recordsPerPage);
+
+        PageResult result = new PageResult();
+        result.setData(page);
+        result.setTotalRecords(totalRecords);
+        result.setTotalPages(totalPages);
+        return result;
     }
 
     @Transactional

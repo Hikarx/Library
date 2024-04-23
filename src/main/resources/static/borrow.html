@@ -16,7 +16,6 @@
     <input type="text" id="book_name" name="book_name" placeholder="请输入">
 
     <button id="search">查询</button>
-    <button id="reset">重置</button>
 </div>
 
 <!-- 借阅信息表格 -->
@@ -35,6 +34,25 @@
     </tbody>
 </table>
 
+<!-- 分页和数据统计 -->
+<div class="paging-container">
+    <p id="page_stat">共 0 条记录, 当前第 1 / 80 页</p>
+    <!-- 分页导航和跳转控制 -->
+    <div>
+        <button id="prev_page">上一页</button>
+        <button id="next_page">下一页</button>
+        <select id="page_no" name="page_no">
+            <option value="5">5</option>
+            <option value="10">10</option>
+            <option value="20">20</option>
+            <option value="25">25</option>
+            <option value="50">50</option>
+            <option value="100">100</option>
+        </select>
+        <input id="page_jump" type="text" />
+        <button id="jump_page">跳转</button>
+    </div>
+</div>
 
 <script  src="js/borrow.js"></script>
 </body>

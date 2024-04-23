@@ -3,6 +3,7 @@ package com.hh.controller;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.hh.pojo.dto.BorrowResult;
+import com.hh.pojo.dto.PageResult;
 import com.hh.service.BorrowRecordsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -25,9 +26,14 @@ public class BorrowRecordsController {
     private BorrowRecordsService borrowRecordsService;
 
     @GetMapping("/all")
-    public ResponseEntity<List<BorrowResult>> getAll(@RequestParam String username, @RequestParam String title){
-        System.out.println("username: " + username + ", title: " + title);
-        List<BorrowResult> all = borrowRecordsService.all(username, title);
+    public ResponseEntity<PageResult> getAll(@RequestParam String username,
+                                                     @RequestParam String title,
+                                                     @RequestParam(defaultValue = "1") int currentPage,
+                                                     @RequestParam(defaultValue = "5") int recordsPerPage){
+        System.out.println("username: " + username + ", title: " + title
+                + ", currentPage: " + currentPage + ", recordsPerPage: " + recordsPerPage);
+        PageResult all = borrowRecordsService.all(username, title, currentPage, recordsPerPage);
+
         System.out.println(all);
         return ResponseEntity.ok(all);
     }
