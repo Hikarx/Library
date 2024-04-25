@@ -9,5 +9,5 @@ import com.hh.pojo.User;
  * @description:
  */
 public interface UserService extends IService<User> {
-    User authenticate(String username, String password);
+    User authenticate(User user);
 }

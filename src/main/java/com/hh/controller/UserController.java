@@ -2,6 +2,8 @@ package com.hh.controller;
 
 import com.hh.pojo.User;
 import com.hh.service.UserService;
+import com.hh.uitl.JwtUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/index")
+@Slf4j
 public class UserController {
 
     @Autowired
@@ -23,10 +26,12 @@ public class UserController {
 
     @PostMapping("/login")
     public ResponseEntity login(@RequestBody User user) {
-        System.out.println("user: " + user);
-        user = userService.authenticate(user.getUsername(), user.getPassword());
+        log.info("user: {}", user);
+        user = userService.authenticate(user);
+
         if (user != null) {
-            return ResponseEntity.ok().body(user.getUserId());
+            String token = JwtUtil.createToken(user.getUserId(), user.getUsername());
+            return ResponseEntity.ok().body(token);
         }
         return ResponseEntity.badRequest().body("用户名或密码错误");
     }

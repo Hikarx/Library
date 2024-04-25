@@ -20,11 +20,12 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     private UserMapper userMapper;
 
     @Override
-    public User authenticate(String username, String password) {
+    public User authenticate(User user) {
         QueryWrapper<User> query = new QueryWrapper<>();
-        query.eq("username", username);
-        query.eq("password", password);
-        User user = userMapper.selectOne(query);
+        query.eq("username", user.getUsername());
+        query.eq("password", user.getPassword());
+        query.eq("role", user.getRole());
+        user = userMapper.selectOne(query);
         if (user != null) {
             return user;
         }
