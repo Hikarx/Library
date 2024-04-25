@@ -18,10 +18,12 @@ public class WebConfig implements WebMvcConfigurer {
     @Resource
     private LoginInterceptor loginInterceptor;
 
+    @Resource
+    private UserInterceptors userInterceptors;
+
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
 
-        //路径不要包含context-path
         registry.addInterceptor(loginInterceptor)
                 .addPathPatterns("/**")
                 .excludePathPatterns(
@@ -31,6 +33,16 @@ public class WebConfig implements WebMvcConfigurer {
                         "/js/**",
                         "/index/login",
                         "/favicon.ico"
-                );
+                ).order(1);
+        registry.addInterceptor(userInterceptors)
+                .addPathPatterns("/**")
+                .excludePathPatterns(
+                        "/index.html",
+                        "/borrow.html",
+                        "/css/**",
+                        "/js/**",
+                        "/index/login",
+                        "/favicon.ico"
+                ).order(0);
     }
 }

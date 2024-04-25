@@ -1,12 +1,19 @@
 let currentPage = 1;
-let recordsPerPage = 5;
+let pageSize = 5;
 let totalPages = 1;
 function searchBooks() {
     const username = document.getElementById('borrower_name').value;
     const title = document.getElementById('book_name').value;
     const tbody = document.getElementById('borrow_info');
 
-    fetch(`/borrow/all?username=${encodeURIComponent(username)}&title=${encodeURIComponent(title)}&currentPage=${currentPage}&recordsPerPage=${recordsPerPage}`)
+    fetch(`/book/all?username=${encodeURIComponent(username)}&title=${encodeURIComponent(title)}&currentPage=${currentPage}&pageSize=${pageSize}`,
+        {
+            method: 'GET',
+            headers: {
+                'Authorization': `${sessionStorage.getItem('token')}`
+            }
+        }
+        )
         .then(response => {
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
@@ -15,7 +22,7 @@ function searchBooks() {
         })
         .then(data => {
             tbody.innerHTML = '';
-            data.data.forEach(book => {
+            data.list.forEach(book => {
                 const tr = document.createElement('tr');
                 tr.innerHTML = `
                     <td>${book.title}</td>
@@ -24,16 +31,19 @@ function searchBooks() {
                     <td>${book.isBorrowed ? '已借阅' : '待借阅'}</td>
                     <td>${book.username ? book.username : '无'}</td>
                     <td>
-                        <button onclick="borrowBook('${book.title}')" ${book.isBorrowed === true ? 'disabled' : ''}>借阅</button>
-                        <button onclick="returnBook('${book.title}')" ${book.isBorrowed !== true ? 'disabled' : ''}>归还</button>
+                        <button onclick="borrowBook('${encodeURIComponent(JSON.stringify(book))}')" ${book.isBorrowed ? 'disabled' : ''}>借阅</button>
+                        <button onclick="returnBook('${encodeURIComponent(JSON.stringify(book))}')"}>归还</button>
                     </td>
                 `;
                 tbody.appendChild(tr);
             });
+
+            const totalRecords = data.total;
+            currentPage = data.pageNum;
+            totalPages = data.pages;
             //更新页码
             const pageStat = document.getElementById('page_stat');
-            totalPages = data.totalPages;
-            pageStat.textContent = `共 ${data.totalRecords} 条记录,当前第 ${currentPage} / ${data.totalPages} 页`;
+            pageStat.textContent = `共 ${totalRecords} 条记录,当前第 ${currentPage} / ${totalPages} 页`;
 
         })
         .catch(error => {
@@ -68,7 +78,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // 每页记录数
     const pageNoSelect = document.getElementById('page_no');
     pageNoSelect.addEventListener('change', function () {
-        recordsPerPage = parseInt(pageNoSelect.value);
+        pageSize = parseInt(pageNoSelect.value);
         currentPage = 1;
         searchBooks();
     });
@@ -90,10 +100,14 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 // 借阅图书
-function borrowBook(bookTitle) {
-    const userId = localStorage.getItem('userId');
-    fetch(`/borrow/${userId}/${encodeURIComponent(bookTitle)}`, {
-        method: 'POST'
+function borrowBook(book) {
+    fetch(`/book/borrow`, {
+        method: 'POST',
+        headers:{
+            'Content-Type': 'application/json',
+            'Authorization': `${sessionStorage.getItem('token')}`
+        },
+        body: JSON.stringify(JSON.parse(decodeURIComponent(book)))
     })
         .then(response => {
             if (response.ok) {
@@ -110,10 +124,14 @@ function borrowBook(bookTitle) {
 }
 
 // 归还图书
-function returnBook(bookTitle) {
-    const userId = localStorage.getItem('userId');
-    fetch(`/borrow/return/${userId}/${encodeURIComponent(bookTitle)}`, {
-        method: 'POST'
+function returnBook(book) {
+    fetch(`/book/return`, {
+        method: 'POST',
+        headers:{
+            'Content-Type': 'application/json',
+            'Authorization': `${sessionStorage.getItem('token')}`
+        },
+        body: JSON.stringify(JSON.parse(decodeURIComponent(book)))
     })
         .then(response => {
             if (response.ok) {

@@ -4,7 +4,8 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.hh.pojo.Books;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Update;
+
+import java.util.List;
 
 /**
  * @Author hh
@@ -14,7 +15,6 @@ import org.apache.ibatis.annotations.Update;
 @Mapper
 public interface BooksMapper extends BaseMapper<Books> {
 
-    @Update("UPDATE books SET is_borrowed = #{flag} WHERE book_id = #{id}")
-    void update1(@Param("flag")Integer flag, @Param("id") Integer id);
+    List<Books> selectBooks(@Param("username")String username, @Param("title")String title);
 
 }

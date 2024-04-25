@@ -1,6 +1,7 @@
 package com.hh.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.github.pagehelper.PageInfo;
 import com.hh.pojo.Books;
 
 /**
@@ -10,4 +11,9 @@ import com.hh.pojo.Books;
  */
 public interface BooksService extends IService<Books> {
 
+    public PageInfo<Books> all(String username, String title, int currentPage, int pageSize);
+
+    public boolean borrowBook(Books book);
+
+    public boolean returnBook(Books book);
 }

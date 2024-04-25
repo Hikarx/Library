@@ -2,10 +2,6 @@ package com.hh.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.hh.pojo.BorrowRecords;
-import com.hh.pojo.dto.BorrowResult;
-import com.hh.pojo.dto.PageResult;
-
-import java.util.List;
 
 /**
  * @Author hh
@@ -13,10 +9,4 @@ import java.util.List;
  * @description:
  */
 public interface BorrowRecordsService extends IService<BorrowRecords> {
-
-    public PageResult all(String username, String title, int currentPage, int recordsPerPage);
-
-    public void borrowBook(Integer userId, String bookTitle);
-
-    public void returnBook(Integer userId, String BookTitle);
 }

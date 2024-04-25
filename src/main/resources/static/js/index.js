@@ -19,7 +19,7 @@ document.getElementById('loginForm').onsubmit = function(event) {
             }
         })
         .then(token => {
-            sessionStorage.setItem('JwtToken', token);
+            sessionStorage.setItem('token', token);
             alert('登录成功');
             window.location.href = './borrow.html';
         })

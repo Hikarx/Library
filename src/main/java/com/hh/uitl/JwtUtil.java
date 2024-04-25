@@ -3,6 +3,7 @@ package com.hh.uitl;
 import cn.hutool.core.date.DateField;
 import cn.hutool.core.date.DateTime;
 import cn.hutool.crypto.GlobalBouncyCastleProvider;
+import cn.hutool.json.JSONObject;
 import cn.hutool.jwt.JWT;
 import cn.hutool.jwt.JWTPayload;
 import cn.hutool.jwt.JWTUtil;
@@ -20,8 +21,8 @@ import java.util.Map;
 public class JwtUtil {
     private static final String key = "library";
 
-    public static String createToken(Integer id, String username) {
-        log.info("token，id：{}，username：{}", id, username);
+    public static String createToken(Integer userId, String username) {
+        log.info("token，userId：{}，username：{}", userId, username);
         GlobalBouncyCastleProvider.setUseBouncyCastle(false);
         DateTime now = DateTime.now();
         DateTime expTime = now.offsetNew(DateField.HOUR, 1);
@@ -33,7 +34,7 @@ public class JwtUtil {
         // 生效时间
         payload.put(JWTPayload.NOT_BEFORE, now);
         // 内容
-        payload.put("id", id);
+        payload.put("userId", userId);
         payload.put("username", username);
         String token = JWTUtil.createToken(payload, key.getBytes());
         log.info("生成后的 token：{}", token);
@@ -54,5 +55,16 @@ public class JwtUtil {
             log.error("异常: ", e);
             return false;
         }
+    }
+
+    public static JSONObject getJSONObject(String token) {
+        GlobalBouncyCastleProvider.setUseBouncyCastle(false);
+        JWT jwt = JWTUtil.parseToken(token).setKey(key.getBytes());
+        JSONObject payloads = jwt.getPayloads();
+        payloads.remove(JWTPayload.ISSUED_AT);
+        payloads.remove(JWTPayload.EXPIRES_AT);
+        payloads.remove(JWTPayload.NOT_BEFORE);
+        log.info("根据token获取原始内容：{}", payloads);
+        return payloads;
     }
 }

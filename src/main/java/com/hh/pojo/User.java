@@ -1,6 +1,7 @@
 package com.hh.pojo;
 
 
+import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.Data;
 
 /**
@@ -10,6 +11,7 @@ import lombok.Data;
  */
 @Data
 public class User {
+    @TableId
     private Integer userId;
     private String username;
     private String password;
