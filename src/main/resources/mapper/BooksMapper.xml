@@ -4,28 +4,43 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.hh.mapper.BooksMapper">
 
+<!--    <select id="selectBooks" resultType="com.hh.pojo.Books">-->
+<!--        SELECT * FROM books-->
+<!--        <where>-->
+<!--            <if test="username != null and username.trim() != ''">-->
+<!--                AND username LIKE CONCAT('%', REPLACE(REPLACE(#{username}, '_', '\\_'), '%', '\\%'), '%') ESCAPE '\\'-->
+<!--            </if>-->
+<!--            <if test="title != null and title.trim() != ''">-->
+<!--                AND title LIKE CONCAT('%', REPLACE(REPLACE(#{title}, '_', '\\_'), '%', '\\%'), '%') ESCAPE '\\'-->
+<!--            </if>-->
+<!--        </where>-->
+<!--    </select>-->
+
+
+    <!-- 根据姓名/书籍模糊查询 -->
     <select id="selectBooks" resultType="com.hh.pojo.Books">
         SELECT * FROM books
         <where>
             <if test="username != null and username.trim() != ''">
-                AND username LIKE #{username}
+                AND username LIKE CONCAT('%', REPLACE(REPLACE(#{username}, '_', '\\_'), '%', '\\%'), '%') ESCAPE '\\'
             </if>
             <if test="title != null and title.trim() != ''">
-                AND title LIKE #{title}
+                AND title LIKE CONCAT('%', REPLACE(REPLACE(#{title}, '_', '\\_'), '%', '\\%'), '%') ESCAPE '\\'
+            </if>
+        </where>
+        LIMIT #{limit} OFFSET #{offset}
+    </select>
+
+    <!-- 根据姓名/书籍模糊查询总记录数 -->
+    <select id="countBy" resultType="java.lang.Integer">
+        SELECT COUNT(*) FROM books
+        <where>
+            <if test="username != null and username.trim() != ''">
+                AND username LIKE CONCAT('%', REPLACE(REPLACE(#{username}, '_', '\\_'), '%', '\\%'), '%') ESCAPE '\\'
+            </if>
+            <if test="title != null and title.trim() != ''">
+                AND title LIKE CONCAT('%', REPLACE(REPLACE(#{title}, '_', '\\_'), '%', '\\%'), '%') ESCAPE '\\'
             </if>
         </where>
     </select>
-
-    <!--<select id="selectBooks" resultType="com.hh.pojo.Books">
-        SELECT * FROM books
-        <where>
-            <if test="username != null and username.trim() != ''">
-                AND username LIKE CONCAT('%', #{username}, '%')
-            </if>
-            <if test="title != null and title.trim() != ''">
-                AND title LIKE CONCAT('%', #{title}, '%')
-            </if>
-        </where>
-    </select>-->
-
 </mapper>

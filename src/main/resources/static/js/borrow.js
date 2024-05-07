@@ -6,7 +6,7 @@ function searchBooks() {
     const title = document.getElementById('book_name').value;
     const tbody = document.getElementById('borrow_info');
 
-    fetch(`/book/all?username=${encodeURIComponent(username)}&title=${encodeURIComponent(title)}&currentPage=${currentPage}&pageSize=${pageSize}`,
+    fetch(`/book/search?username=${encodeURIComponent(username)}&title=${encodeURIComponent(title)}&currentPage=${currentPage}&pageSize=${pageSize}`,
         {
             method: 'GET',
             headers: {
@@ -22,7 +22,7 @@ function searchBooks() {
         })
         .then(data => {
             tbody.innerHTML = '';
-            data.list.forEach(book => {
+            data.content.list.forEach(book => {
                 const tr = document.createElement('tr');
                 tr.innerHTML = `
                     <td>${book.title}</td>
@@ -38,9 +38,9 @@ function searchBooks() {
                 tbody.appendChild(tr);
             });
 
-            const totalRecords = data.total;
-            currentPage = data.pageNum;
-            totalPages = data.pages;
+            const totalRecords = data.content.total;//总条数
+            currentPage = data.content.pageNum;//当前页
+            totalPages = data.content.pages;//总页数
             //更新页码
             const pageStat = document.getElementById('page_stat');
             pageStat.textContent = `共 ${totalRecords} 条记录,当前第 ${currentPage} / ${totalPages} 页`;
@@ -109,12 +109,13 @@ function borrowBook(book) {
         },
         body: JSON.stringify(JSON.parse(decodeURIComponent(book)))
     })
-        .then(response => {
-            if (response.ok) {
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
                 alert('借阅成功');
                 searchBooks();
             } else {
-                alert('借阅失败');
+                alert(`借阅失败: ${data.message}`);
             }
         })
         .catch(error => {
@@ -133,12 +134,13 @@ function returnBook(book) {
         },
         body: JSON.stringify(JSON.parse(decodeURIComponent(book)))
     })
-        .then(response => {
-            if (response.ok) {
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
                 alert('归还成功');
                 searchBooks();
             } else {
-                alert('归还失败');
+                alert(`归还失败: ${data.message}`);
             }
         })
         .catch(error => {

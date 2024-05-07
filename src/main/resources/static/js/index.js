@@ -11,17 +11,15 @@ document.getElementById('loginForm').onsubmit = function(event) {
         },
         body: JSON.stringify({ username: username, password: password, role: role })
     })
-        .then(response => {
-            if (response.ok) {
-                return response.text();
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                sessionStorage.setItem('token', data.content);
+                alert('登录成功');
+                window.location.href = './borrow.html';
             } else {
-                throw new Error('登录失败');
+                alert(`登录失败: ${data.message}`);
             }
-        })
-        .then(token => {
-            sessionStorage.setItem('token', token);
-            alert('登录成功');
-            window.location.href = './borrow.html';
         })
         .catch(error => {
             console.error('错误:', error);

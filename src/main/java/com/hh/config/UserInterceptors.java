@@ -24,7 +24,7 @@ public class UserInterceptors  implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         String token = request.getHeader("Authorization");
-        if (StrUtil.isNotBlank("token")) {
+        if (StrUtil.isNotBlank(token)) {
             JSONObject json = JwtUtil.getJSONObject(token);
             log.info("当前登录用户：{}", json);
             UserThreadLocal.setUser(JSONUtil.toBean(json, User.class));

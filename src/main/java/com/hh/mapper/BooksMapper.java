@@ -15,6 +15,9 @@ import java.util.List;
 @Mapper
 public interface BooksMapper extends BaseMapper<Books> {
 
-    List<Books> selectBooks(@Param("username")String username, @Param("title")String title);
+//    List<Books> selectBooks(@Param("username")String username, @Param("title")String title);
+    List<Books> selectBooks(@Param("username")String username, @Param("title")String title,
+                            @Param("offset") int offset, @Param("limit") int limit);
 
+    Integer countBy(@Param("username")String username, @Param("title")String title);
 }

@@ -1,5 +1,6 @@
 package com.hh.controller;
 
+import com.hh.pojo.CommonResp;
 import com.hh.pojo.User;
 import com.hh.service.UserService;
 import com.hh.uitl.JwtUtil;
@@ -25,14 +26,10 @@ public class UserController {
     private UserService userService;
 
     @PostMapping("/login")
-    public ResponseEntity login(@RequestBody User user) {
+    public CommonResp<String> login(@RequestBody User user) {
         log.info("user: {}", user);
-        user = userService.authenticate(user);
+        String token = userService.login(user);
 
-        if (user != null) {
-            String token = JwtUtil.createToken(user.getUserId(), user.getUsername());
-            return ResponseEntity.ok().body(token);
-        }
-        return ResponseEntity.badRequest().body("用户名或密码错误");
+        return new CommonResp<>(token);
     }
 }
